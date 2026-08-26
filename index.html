@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es" data-skin="debian">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="CV de Daniel Álvarez Alfonso — Desarrollador Web en Formación" />
+  <title>Daniel Álvarez Alfonso — Desarrollador Web en Formación</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⌨️</text></svg>" />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+  <header class="header" role="banner">
+    <div class="header__bar">
+      <div class="header__left">
+        <span class="header__dot header__dot--red"></span>
+        <span class="header__dot header__dot--yellow"></span>
+        <span class="header__dot header__dot--green"></span>
+      </div>
+      <div class="header__right">
+        <button
+          class="skin-cycle"
+          id="skin-cycle"
+          aria-label="Cambiar tema visual"
+          title="Cambiar tema (Ctrl+Shift+T)"
+        >
+          <span class="skin-cycle__label" id="skin-label">$ theme debian</span>
+        </button>
+        <button
+          class="palette-trigger"
+          id="palette-open"
+          aria-label="Abrir command palette (Ctrl+K)"
+          title="Command Palette (Ctrl+K)"
+        >
+          ⌘K
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- HERO -->
+    <section class="hero" id="hero" aria-label="Cabecera">
+      <div class="hero__content">
+        <p class="hero__whoami">$ <span class="typing" id="typing-target">whoami</span><span class="cursor" aria-hidden="true"></span></p>
+        <h1 class="hero__name" data-reveal>Daniel Álvarez Alfonso</h1>
+        <p class="hero__role" data-reveal>Desarrollador Web en Formación</p>
+        <p class="hero__tagline" data-reveal id="tagline"></p>
+        <nav class="hero__links" data-reveal aria-label="Enlaces personales">
+          <a href="https://github.com/DanielAlvAlf" class="link link--github" target="_blank" rel="noopener noreferrer">
+            <span class="link__icon">⎇</span> GitHub
+          </a>
+          <a href="mailto:daniel.alvarez.3991@gmail.com" class="link link--email">
+            <span class="link__icon">✉</span> Email
+          </a>
+        </nav>
+      </div>
+    </section>
+
+    <!-- SOBRE MÍ -->
+    <section class="section" id="sobre-mi" aria-labelledby="sobre-mi-title">
+      <h2 class="section__title" data-reveal>
+        <span class="section__prompt">&gt;</span> Sobre mí
+      </h2>
+      <p class="section__text" data-reveal id="about-text"></p>
+    </section>
+
+    <!-- EXPERIENCIA -->
+    <section class="section" id="experiencia" aria-labelledby="experiencia-title">
+      <h2 class="section__title" data-reveal>
+        <span class="section__prompt">&gt;</span> Experiencia
+      </h2>
+      <div class="timeline" id="experience-list" role="list"></div>
+    </section>
+
+    <!-- PROYECTOS -->
+    <section class="section" id="proyectos" aria-labelledby="proyectos-title">
+      <h2 class="section__title" data-reveal>
+        <span class="section__prompt">&gt;</span> Proyectos destacados
+      </h2>
+      <div class="projects-grid" id="projects-list"></div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <h2 class="section__title" data-reveal>
+        <span class="section__prompt">&gt;</span> Skills
+      </h2>
+      <div class="skills-grid" id="skills-list"></div>
+    </section>
+
+    <!-- EDUCACIÓN -->
+    <section class="section" id="educacion" aria-labelledby="educacion-title">
+      <h2 class="section__title" data-reveal>
+        <span class="section__prompt">&gt;</span> Educación
+      </h2>
+      <div class="education-list" id="education-list"></div>
+    </section>
+
+    <!-- CERTIFICACIONES -->
+    <section class="section" id="certificaciones" aria-labelledby="certificaciones-title">
+      <h2 class="section__title" data-reveal>
+        <span class="section__prompt">&gt;</span> Certificaciones y Cursos
+      </h2>
+      <div class="certifications-list" id="certifications-list"></div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__text">
+      <span class="footer__prompt">$</span> Hecho con dedicación por Daniel Álvarez Alfonso ·
+      <button class="footer__pdf" id="print-btn" aria-label="Imprimir o guardar como PDF">
+        Descargar PDF
+      </button>
+    </p>
+  </footer>
+
+  <!-- COMMAND PALETTE -->
+  <div class="palette-overlay" id="palette-overlay" aria-hidden="true">
+    <div class="palette-modal" role="dialog" aria-label="Command Palette" aria-modal="true">
+      <input
+        type="text"
+        class="palette-input"
+        id="palette-input"
+        placeholder="Escribe para filtrar secciones..."
+        aria-label="Buscar sección"
+        autocomplete="off"
+      />
+      <ul class="palette-results" id="palette-results" role="listbox"></ul>
+      <div class="palette-hint">
+        <span><kbd>↑↓</kbd> navegar</span>
+        <span><kbd>Enter</kbd> seleccionar</span>
+        <span><kbd>Esc</kbd> cerrar</span>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
