@@ -62,12 +62,16 @@ export const projects = [
   },
 ];
 
-export const skills = {
-  languages: ["HTML / CSS", "JavaScript", "SQL / BBDD"],
-  frontend: ["En formación"],
-  backend: ["En formación"],
-  tools: ["Git", "GitHub", "Redes LTE/4G", "Huawei / Nokia", "CCNA (Cisco)", "Cableado Estructurado"],
-};
+export const skills = [
+  "HTML / CSS",
+  "JavaScript",
+  "SQL / BBDD",
+  "Git / GitHub",
+  "Redes LTE/4G",
+  "Huawei / Nokia",
+  "CCNA (Cisco)",
+  "Cableado Estructurado",
+];
 
 export const education = [
   {
