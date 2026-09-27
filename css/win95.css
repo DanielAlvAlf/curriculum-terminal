@@ -1,0 +1,88 @@
+/* ============================================
+   Tema Windows 95
+   Relieves con 4 colores: blanco, gris claro, gris oscuro, negro
+   ============================================ */
+
+[data-skin="win95"] {
+  --desk: #008080;
+  --bar-bg: #c0c0c0;
+  --surface: #c0c0c0;
+  --content: #fff;
+  --text: #000;
+  --text-dim: #444;
+  --accent: #000080;
+  --title-bg: linear-gradient(90deg, #000080, #1084d0);
+  --menu-hover: #000080;
+  --line: #808080;
+  --term-bg: #000;
+  --term-text: #c0c0c0;
+  --term-font: "VT323", "Courier New", monospace;
+  --bar-height: 30px;
+
+  /* Relieves reutilizables */
+  --raised: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+  --sunken: inset -1px -1px #fff, inset 1px 1px #808080, inset -2px -2px #dfdfdf, inset 2px 2px #000;
+}
+
+[data-skin="win95"] body {
+  padding-bottom: var(--bar-height);
+  font-family: Tahoma, "MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif;
+  font-size: 13px;
+  -webkit-font-smoothing: none;
+}
+[data-skin="win95"] * { border-radius: 0 !important; }
+[data-skin="win95"] ::selection { background: #000080; color: #fff; }
+
+/* ─── Barra de tareas ─────────────────────── */
+[data-skin="win95"] .os-bar { bottom: 0; box-shadow: inset 0 1px #dfdfdf, inset 0 2px #fff; }
+[data-skin="win95"] .os-btn { box-shadow: var(--raised); background: #c0c0c0; }
+[data-skin="win95"] .os-btn:active,
+[data-skin="win95"] .show > .os-btn { box-shadow: var(--sunken); background: #c0c0c0; }
+[data-skin="win95"] .task-btn { box-shadow: var(--sunken); background: #dfdfdf; min-width: 160px; font-weight: bold; cursor: default; }
+[data-skin="win95"] .os-tray { height: calc(var(--bar-height) - 6px); padding: 0 8px; box-shadow: inset -1px -1px #fff, inset 1px 1px #808080; }
+[data-skin="win95"] .tray-btn { box-shadow: none; padding: 0; height: auto; }
+
+/* ─── Menú Inicio ─────────────────────────── */
+[data-skin="win95"] .start-menu { padding: 3px 3px 3px 30px; margin-bottom: 2px; background: #c0c0c0; border: 0; box-shadow: var(--raised); min-width: 210px; }
+[data-skin="win95"] .start-menu__band {
+  position: absolute; left: 3px; top: 3px; bottom: 3px; width: 24px;
+  background: linear-gradient(0deg, #000080, #1084d0);
+  color: #c0c0c0; font: bold 18px Arial, sans-serif;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  padding-top: 6px;
+}
+[data-skin="win95"] .start-menu__band b { color: #fff; }
+[data-skin="win95"] .dropdown-item { padding: 6px 12px; color: #000; }
+[data-skin="win95"] .dropdown-divider { margin: 3px 2px; border-top: 1px solid #808080; border-bottom: 1px solid #fff; }
+
+/* ─── Ventanas ────────────────────────────── */
+[data-skin="win95"] .window { padding: 3px; box-shadow: var(--raised); }
+[data-skin="win95"] .window__titlebar { padding: 2px 3px 2px 6px; }
+[data-skin="win95"] .window__controls i {
+  width: 16px; height: 14px; background: #c0c0c0; box-shadow: var(--raised);
+  color: #000; font: bold 10px/13px Arial, sans-serif; text-align: center;
+}
+[data-skin="win95"] .btn-min::before { content: "_"; }
+[data-skin="win95"] .btn-max::before { content: "□"; }
+[data-skin="win95"] .btn-close { margin-left: 2px; }
+[data-skin="win95"] .btn-close::before { content: "×"; font-size: 13px; }
+[data-skin="win95"] .window__body { margin-top: 2px; box-shadow: var(--sunken); padding: 12px 14px; }
+
+/* Terminal MS-DOS */
+[data-skin="win95"] .window--terminal .window__body { font-size: 1.35rem; line-height: 1.25; }
+[data-skin="win95"] .window--terminal .hero__name { color: #fff; font-size: 2.4rem; }
+
+/* ─── Contenido ───────────────────────────── */
+[data-skin="win95"] .entry__list li::marker { content: "► "; font-size: .7em; color: #000080; }
+[data-skin="win95"] .panel { border: 0; box-shadow: var(--raised); background: #c0c0c0; }
+[data-skin="win95"] .chip { border: 0; box-shadow: var(--raised); background: #c0c0c0; padding: 2px 8px; }
+[data-skin="win95"] .check { border: 0; box-shadow: var(--sunken); }
+
+/* Hoja de Excel */
+[data-skin="win95"] .sheet th, [data-skin="win95"] .sheet td { border-color: #c0c0c0; }
+[data-skin="win95"] .sheet thead th,
+[data-skin="win95"] .sheet tbody th { background: #c0c0c0; box-shadow: var(--raised); text-align: center; }
+
+/* Group box de los cuadros de diálogo */
+[data-skin="win95"] .group { border: 1px solid #808080; box-shadow: 1px 1px #fff, inset 1px 1px #fff; }
+[data-skin="win95"] .group__title { color: #000; font-weight: normal; }

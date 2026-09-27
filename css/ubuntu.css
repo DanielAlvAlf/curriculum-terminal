@@ -1,0 +1,90 @@
+/* ============================================
+   Tema Ubuntu 10.04 Lucid Lynx (Ambiance)
+   Barras oscuras, botones a la izquierda, acentos naranja
+   ============================================ */
+
+[data-skin="ubuntu"] {
+  --desk: #2c001e;
+  --bar-bg: linear-gradient(#4d4c48, #3c3b37);
+  --bar-text: #dfdbd2;
+  --surface: #3c3b37;
+  --content: #fff;
+  --text: #3c3c3c;
+  --text-dim: #7a756e;
+  --accent: #dd4814;
+  --title-bg: linear-gradient(#5a5953, #3c3b37);
+  --title-text: #dfdbd2;
+  --menu-hover: #f07746;
+  --menu-hover-text: #fff;
+  --line: #d6d3ce;
+  --term-bg: #300a24;
+  --term-text: #fff;
+  --term-font: "Ubuntu Mono", monospace;
+  --bar-height: 26px;
+}
+
+[data-skin="ubuntu"] body {
+  padding-top: var(--bar-height);
+  font-family: "Ubuntu", sans-serif;
+  font-size: 14px;
+  /* Wallpaper Lucid: morado con luz cálida */
+  background:
+    radial-gradient(ellipse 90% 60% at 85% 105%, rgba(233, 84, 32, .45), transparent 70%),
+    radial-gradient(ellipse 80% 70% at 10% 0%, rgba(160, 60, 140, .55), transparent 70%),
+    linear-gradient(160deg, #3d0b35 0%, #6b1d57 55%, #2c001e 100%) fixed;
+}
+[data-skin="ubuntu"] ::selection { background: #f07746; color: #fff; }
+
+/* ─── Panel GNOME superior ────────────────── */
+[data-skin="ubuntu"] .os-bar { top: 0; gap: 2px; font-size: 13px; box-shadow: 0 1px 3px rgba(0, 0, 0, .5); }
+[data-skin="ubuntu"] .os-btn { border-radius: 3px; }
+[data-skin="ubuntu"] .os-btn:hover,
+[data-skin="ubuntu"] .show > .os-btn { background: rgba(255, 255, 255, .12); }
+[data-skin="ubuntu"] .os-tray { gap: 12px; padding-right: 8px; }
+
+/* Menús desplegables oscuros */
+[data-skin="ubuntu"] .dropdown-menu { background: #3c3b37; border: 1px solid #2b2a27; border-radius: 0 0 4px 4px; padding: 4px 0; margin-top: 0; box-shadow: 0 3px 8px rgba(0, 0, 0, .5); }
+[data-skin="ubuntu"] .dropdown-item { color: #dfdbd2; padding: 5px 18px; }
+[data-skin="ubuntu"] .dropdown-divider { border-top-color: #57554f; }
+
+/* ─── Ventanas ────────────────────────────── */
+[data-skin="ubuntu"] .window { border-radius: 6px 6px 2px 2px; overflow: hidden; box-shadow: 0 6px 22px rgba(0, 0, 0, .55); }
+[data-skin="ubuntu"] .window__titlebar { padding: 5px 8px; font-size: 13px; }
+[data-skin="ubuntu"] .window__title { text-align: center; }
+/* Lucid: botones a la izquierda (cerrar, minimizar, maximizar) */
+[data-skin="ubuntu"] .window__controls { order: -1; gap: 4px; }
+[data-skin="ubuntu"] .btn-close { order: -1; }
+[data-skin="ubuntu"] .window__controls i {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: linear-gradient(#6a6964, #45443f); border: 1px solid #2b2a27;
+  color: #dfdbd2; font: bold 11px/16px sans-serif; text-align: center;
+}
+[data-skin="ubuntu"] .btn-min::before { content: "–"; }
+[data-skin="ubuntu"] .btn-max::before { content: "+"; }
+[data-skin="ubuntu"] .btn-close::before { content: "×"; }
+[data-skin="ubuntu"] .window__controls .btn-close { background: linear-gradient(#f79a6c, #e05a1c); color: #fff; }
+/* El menú de aplicación continúa la barra oscura (Ambiance) */
+[data-skin="ubuntu"] .window__menubar { background: #3c3b37; color: #dfdbd2; font-size: 13px; padding: 3px 10px 5px; }
+[data-skin="ubuntu"] .window__menubar u { text-decoration: none; }
+[data-skin="ubuntu"] .window__body { padding: 16px 18px; }
+
+/* gnome-terminal */
+[data-skin="ubuntu"] .window--terminal .window__body { font-size: 1.05rem; }
+[data-skin="ubuntu"] .window--terminal .prompt { color: #8ae234; font-weight: bold; }
+[data-skin="ubuntu"] .window--terminal .hero__name { color: #fff; }
+[data-skin="ubuntu"] .window--terminal .hero__role { color: #fcaf3e; }
+
+/* ─── Contenido ───────────────────────────── */
+[data-skin="ubuntu"] .entry__list li::marker { color: #dd4814; }
+[data-skin="ubuntu"] .panel { border-radius: 4px; background: #f7f6f5; }
+[data-skin="ubuntu"] .chip { border: 0; border-radius: 10px; background: #fbe3d8; color: #a8360c; }
+[data-skin="ubuntu"] .check { border-radius: 2px; border-color: #b7b2aa; color: #dd4814; }
+
+/* Hoja de OpenOffice Calc */
+[data-skin="ubuntu"] .sheet thead th,
+[data-skin="ubuntu"] .sheet tbody th { background: #ebe9e6; color: #555; text-align: center; }
+[data-skin="ubuntu"] .sheet tbody tr:nth-child(even) td { background: #faf9f8; }
+
+/* Grupos (estilo GTK) */
+[data-skin="ubuntu"] .group { border-radius: 4px; }
+[data-skin="ubuntu"] .sheet__group td { background: #fbe3d8; }
