@@ -13,7 +13,7 @@
   --surface: #3c3b37;
   --content: #fff;
   --text: #3c3c3c;
-  --text-dim: #7a756e;
+  --text-dim: #706b64;  /* ≥4,5:1 también sobre el gris claro de las tarjetas */
   --accent: #c2410c;
   --title-bg: linear-gradient(#5a5953, #3c3b37);
   --title-text: #dfdbd2;

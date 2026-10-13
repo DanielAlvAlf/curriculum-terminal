@@ -87,6 +87,8 @@ html:not(.js) .os-tray { display: none; } /* sin JS solo quedaría la bandeja va
 .window__controls > span { display: inline-block; }
 .window__menubar { display: flex; gap: 12px; padding: 2px 8px; }
 .window__body { padding: var(--space-m); background: var(--content); color: var(--text); }
+/* Párrafos seguidos dentro de una ventana (p. ej. Sobre mí) */
+.window__heading ~ p + p { margin-top: .75em; }
 .window__heading {
   margin-bottom: .75rem; padding-bottom: var(--space-xs); border-bottom: 1px solid var(--line);
   font-size: 1.15rem; font-weight: bold; color: var(--accent);
@@ -106,13 +108,15 @@ html:not(.js) .os-tray { display: none; } /* sin JS solo quedaría la bandeja va
 
 /* Datos rápidos con puntos de relleno, como una salida de terminal */
 .facts { display: grid; grid-template-columns: max-content 1fr; align-items: start; gap: 0 1ch; margin-bottom: var(--space-m); }
+.facts:last-child { margin-bottom: 0; }
 .facts dt { display: flex; }
 .facts dt::after { content: ""; flex: 1; min-width: 2ch; margin: 0 0 .35em 1ch; border-bottom: 2px dotted; opacity: .5; }
 
 /* Proyectos */
 .projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: var(--space-m) var(--space-l); padding: 0; list-style: none; }
 .project { height: 100%; padding: .75rem; border: 1px solid var(--line); }
-.project__title { margin-bottom: var(--space-s); font-size: 1rem; font-weight: bold; color: var(--accent); }
+.project__title { margin-bottom: var(--space-xs); font-size: 1rem; font-weight: bold; color: var(--accent); }
+.project__meta { margin-bottom: var(--space-s); color: var(--text-dim); font-size: .9em; }
 .project p { margin-bottom: var(--space-m); }
 .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: .75rem; padding: 0; list-style: none; }
 .tags li { padding: 1px 8px; border: 1px solid var(--line); font-size: .85em; }
@@ -124,6 +128,7 @@ html:not(.js) .os-tray { display: none; } /* sin JS solo quedaría la bandeja va
 .entry__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-xs) var(--space-m); }
 .entry__title { font-size: 1rem; font-weight: bold; line-height: inherit; color: var(--accent); }
 .entry__meta { color: var(--text-dim); }
+.entry__note { margin-top: var(--space-xs); color: var(--text-dim); font-size: .9em; }
 .entry__list { margin-top: .4rem; padding-left: 1.2rem; }
 
 /* Habilidades: grupos con el título sobre el borde */
@@ -188,10 +193,10 @@ html:not(.js) .os-tray { display: none; } /* sin JS solo quedaría la bandeja va
 @page { size: A4; margin: 15mm 18mm; }
 @media print {
   * { background: #fff !important; color: #1a1a1a !important; box-shadow: none !important; border-radius: 0 !important; }
-  body { font: 10pt/1.45 Arial, Helvetica, sans-serif !important; padding: 0 !important; }
+  body { font: 9.5pt/1.45 Arial, Helvetica, sans-serif !important; padding: 0 !important; }
   .os-bar, .menu, .skip-link, .js-only, .window__titlebar, .window__menubar, .term-line, .site-footer { display: none !important; }
   #desktop { max-width: none; padding: 0 !important; }
-  .window { margin: 0 0 10pt !important; border: 0 !important; padding: 0 !important; animation: none !important; }
+  .window { margin: 0 0 8pt !important; border: 0 !important; padding: 0 !important; animation: none !important; }
   .window__body { padding: 0 !important; border: 0 !important; font: inherit !important; }
   .window__heading { margin: 0 0 4pt !important; padding-bottom: 2pt !important; border-bottom: 1px solid #999 !important; font-size: 12pt !important; font-weight: bold !important; }
   .hero__name { font-size: 20pt !important; }
@@ -203,15 +208,24 @@ html:not(.js) .os-tray { display: none; } /* sin JS solo quedaría la bandeja va
   li::marker { color: #1a1a1a !important; }
   .entry__title, .project__title { font-size: 10.5pt !important; }
   .entry { padding: 4pt 0 !important; }
-  .projects { gap: 6pt 18pt; }
+  .projects { grid-template-columns: repeat(3, 1fr); gap: 6pt 14pt; }
   .project { padding: 0 !important; border: 0 !important; }
+  .project p { margin-bottom: 3pt; }
+  .project__meta { margin-bottom: 2pt; }
   .tags { display: block; margin-bottom: 2pt; }
   .tags li { display: inline; padding: 0 !important; border: 0 !important; font-size: 8.5pt; }
   .tags li + li::before { content: " · "; content: " · " / ""; }
-  .checklist li::before, .group, .sheet th, .sheet td { border-color: #bbb !important; }
-  .group { margin-top: 8pt; padding: 0 6pt 4pt; }
-  .group__title { margin-bottom: 0; }
-  .checklist { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 2pt 12pt; }
+  .sheet th, .sheet td { border-color: #bbb !important; }
+  /* Habilidades en una línea por grupo: «Grupo: a · b · c» */
+  .group { margin-top: 3pt; padding: 0; border: 0 !important; }
+  .group__title { display: inline; margin: 0; padding: 0; font-weight: bold !important; }
+  .group__title::after { content: ": "; }
+  .checklist, .checklist li { display: inline; }
+  .checklist li::before { content: none; }
+  .checklist li + li::before {
+    content: " · "; content: " · " / "";
+    display: inline; width: auto; height: auto; margin: 0; border: 0; box-shadow: none !important; color: inherit !important; font: inherit;
+  }
   .sheet th, .sheet td { padding: 1pt 4pt; }
   .entry, .project, tr { break-inside: avoid; }
   .sheet-wrap { overflow: visible; }
