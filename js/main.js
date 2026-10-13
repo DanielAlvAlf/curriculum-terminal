@@ -1,11 +1,13 @@
 /* ============================================
    CV Retro OS — main.js
-   Pinta las ventanas desde data.js (CV) y gestiona
-   tema, menús, sonidos, tecleo, scroll y reloj.
+   Mejora progresiva: el CV está completo en el HTML.
+   Aquí solo se añaden el cambio de tema, el cierre de
+   menús, los sonidos, el efecto de tecleo y el reloj.
    ============================================ */
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => [...document.querySelectorAll(sel)];
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function getStored(key, fallback) {
   try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; }
@@ -14,189 +16,69 @@ function store(key, value) {
   try { localStorage.setItem(key, value); } catch {}
 }
 
-// ─── 1. CONFIGURACIÓN DE TEMAS ──────────────────────────
-// Cada tema define el prompt de la terminal y el título de cada ventana.
-const THEMES = {
-  win95: {
-    prompt: "C:\\CV>",
-    titles: {
-      hero: "MS-DOS Prompt",
-      "sobre-mi": "sobre-mi.txt - Bloc de notas",
-      experiencia: "Explorando - C:\\Experiencia",
-      proyectos: "proyectos.zip - WinZip",
-      skills: "Propiedades del sistema",
-      educacion: "educacion.doc - WordPad",
-      certificaciones: "Microsoft Excel - certificaciones.xls",
-    },
-  },
-  ubuntu: {
-    prompt: "daniel@lucid:~$",
-    titles: {
-      hero: "daniel@lucid: ~",
-      "sobre-mi": "sobre-mi.txt (~/cv) - gedit",
-      experiencia: "experiencia - Navegador de archivos",
-      proyectos: "proyectos.tar.gz - Gestor de archivadores",
-      skills: "Gestor de paquetes Synaptic",
-      educacion: "educacion.odt - OpenOffice.org Writer",
-      certificaciones: "certificaciones.ods - OpenOffice.org Calc",
-    },
-  },
-};
-const SKINS = Object.keys(THEMES);
-
-// ─── 2. RENDER DE SECCIONES ─────────────────────────────
-const { profile, experience, projects, skills, education, certifications } = CV;
-
-const SECTIONS = [
-  { id: "sobre-mi", label: "Sobre mí", icon: "📝", render: () =>
-    `<p class="mb-0">${profile.about}</p>` },
-
-  { id: "experiencia", label: "Experiencia", icon: "📁", render: () =>
-    experience.map((job) => `
-      <article class="entry">
-        <div class="d-flex flex-wrap justify-content-between">
-          <strong class="entry__title">${job.role} · ${job.company}</strong>
-          <span class="entry__meta">${job.period}</span>
-        </div>
-        <ul class="entry__list">${job.achievements.map((a) => `<li>${a}</li>`).join("")}</ul>
-      </article>`).join("") },
-
-  { id: "proyectos", label: "Proyectos", icon: "🗜️", render: () =>
-    `<div class="row">${projects.map((p) => `
-      <div class="col-md-6 mb-3">
-        <article class="panel h-100">
-          <h3 class="entry__title">${p.name}</h3>
-          <p>${p.description}</p>
-          <div class="mb-2">${p.stack.map((s) => `<span class="chip">${s}</span>`).join("")}</div>
-          ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener">Ver código →</a>` : ""}
-        </article>
-      </div>`).join("")}</div>` },
-
-  { id: "skills", label: "Skills", icon: "⚙️", render: () =>
-    Object.entries(skills).map(([group, list]) => `
-      <fieldset class="group">
-        <legend class="group__title">${group}</legend>
-        <ul class="checklist">${list.map((s) => `<li><span class="check" aria-hidden="true">✓</span>${s}</li>`).join("")}</ul>
-      </fieldset>`).join("") },
-
-  { id: "educacion", label: "Educación", icon: "🎓", render: () =>
-    education.map((e) => `
-      <article class="entry">
-        <div class="d-flex flex-wrap justify-content-between">
-          <strong class="entry__title">${e.degree}</strong>
-          <span class="entry__meta">${e.year}</span>
-        </div>
-        <span>${e.institution}</span>
-      </article>`).join("") },
-
-  { id: "certificaciones", label: "Certificaciones", icon: "📊", render: () => {
-    let row = 0; // numeración continua, como las filas de una hoja de cálculo
-    return `
-    <div class="table-responsive">
-      <table class="table table-sm sheet mb-0">
-        <thead><tr><th></th><th>Curso</th><th>Entidad</th><th>Año</th></tr></thead>
-        <tbody>${Object.entries(certifications).map(([group, list]) => `
-          <tr class="sheet__group"><th scope="row">${++row}</th><td colspan="3">${group}</td></tr>
-          ${list.map((c) => `
-          <tr><th scope="row">${++row}</th><td>${c.name}</td><td>${c.issuer}</td><td>${c.year}</td></tr>`).join("")}`).join("")}
-        </tbody>
-      </table>
-    </div>`;
-  } },
-];
-
-// Ventana genérica: barra de título + menú + contenido
-function windowHtml(id, label, body, extraClass = "") {
-  const menubar = extraClass ? "" : `
-    <div class="window__menubar" aria-hidden="true">
-      <span><u>A</u>rchivo</span><span><u>E</u>dición</span><span><u>V</u>er</span><span>Ay<u>u</u>da</span>
-    </div>`;
-  return `
-    <section class="window ${extraClass}" id="${id}" aria-labelledby="${id}-title" data-reveal>
-      <header class="window__titlebar">
-        <span class="window__title" id="${id}-title"></span>
-        <span class="window__controls" aria-hidden="true"><i class="btn-min"></i><i class="btn-max"></i><i class="btn-close"></i></span>
-      </header>
-      ${menubar}
-      <div class="window__body">
-        <h2 class="sr-only print-heading">${label}</h2>
-        ${body}
-      </div>
-    </section>`;
-}
-
-function heroHtml() {
-  const links = [
-    `<a href="${profile.github}" target="_blank" rel="noopener">GitHub</a>`,
-    `<a href="mailto:${profile.email}">${profile.email}</a>`,
-    profile.linkedin && `<a href="${profile.linkedin}" target="_blank" rel="noopener">LinkedIn</a>`,
-  ].filter(Boolean).join(" · ");
-
-  return windowHtml("hero", "Cabecera", `
-    <p class="term-line"><span class="prompt"></span> <span id="typing">whoami</span><span class="cursor" aria-hidden="true"></span></p>
-    <h1 class="hero__name">${profile.name}</h1>
-    <p class="hero__role">${profile.role}</p>
-    <p class="hero__tagline" id="tagline">${profile.tagline}</p>
-    <p class="hero__links mb-0">${links}</p>`, "window--terminal");
-}
-
-// Menús: apps = secciones, places = enlaces, system = acciones
-function menuHtml(group) {
-  const item = (href, text, attrs = "") => `<a class="dropdown-item" href="${href}" ${attrs}>${text}</a>`;
-  const groups = {
-    apps: [item("#hero", "💻 Terminal"), ...SECTIONS.map((s) => item(`#${s.id}`, `${s.icon} ${s.label}`))],
-    places: [
-      item(profile.github, "🌐 GitHub", 'target="_blank" rel="noopener"'),
-      item(`mailto:${profile.email}`, "✉️ Email"),
-      profile.linkedin && item(profile.linkedin, "💼 LinkedIn", 'target="_blank" rel="noopener"'),
-    ].filter(Boolean),
-    system: [
-      item("#", "🎨 Cambiar tema", 'data-action="skin"'),
-      item("#", "🖨️ Guardar como PDF", 'data-action="print"'),
-    ],
-  };
-  return group.split(" ").map((g) => groups[g].join("")).join('<div class="dropdown-divider"></div>');
-}
-
-function render() {
-  $("#desktop").innerHTML = heroHtml() + SECTIONS.map((s) => windowHtml(s.id, s.label, s.render())).join("");
-  $$("[data-menu]").forEach((el) => { el.innerHTML = menuHtml(el.dataset.menu); });
-}
-
-// ─── 3. TEMA ────────────────────────────────────────────
-function applySkin(name) {
-  const theme = THEMES[name];
-  document.documentElement.dataset.skin = name;
-  Object.entries(theme.titles).forEach(([id, title]) => { $(`#${id}-title`).textContent = title; });
-  $(".prompt").textContent = theme.prompt;
-  store("cv-skin", name);
-  updateClock();
-}
+// ─── 1. TEMA ────────────────────────────────────────────
+// Los títulos de ventana, el prompt y el reloj se adaptan solos con CSS.
+const SKINS = ["win95", "ubuntu"];
 
 function nextSkin() {
-  const current = document.documentElement.dataset.skin;
-  applySkin(SKINS[(SKINS.indexOf(current) + 1) % SKINS.length]);
+  const root = document.documentElement;
+  const next = SKINS[(SKINS.indexOf(root.dataset.skin) + 1) % SKINS.length];
+  root.dataset.skin = next;
+  store("cv-skin", next);
   sounds.skin();
 }
 
-// ─── 4. SONIDOS (Web Audio API) ─────────────────────────
-let audioCtx;
-let muted = getStored("cv-muted", "false") === "true";
+// ─── 2. MENÚS <details> ─────────────────────────────────
+// El atributo name ya deja un solo menú abierto; falta cerrarlos
+// al pulsar fuera, al elegir una opción o con Escape.
+function closeMenus(target) {
+  $$(".menu[open]").forEach((menu) => {
+    if (!menu.contains(target) || target.closest(".menu__item")) menu.open = false;
+  });
+}
 
-function playTone(freq, duration, type = "square", vol = 0.06) {
-  if (muted) return;
+function closeMenuOnEscape(e) {
+  if (e.key !== "Escape") return;
+  const menu = $(".menu[open]");
+  if (!menu) return;
+  menu.open = false;
+  menu.querySelector("summary").focus();
+}
+
+// ─── 3. SONIDOS (Web Audio API) ─────────────────────────
+// El navegador solo deja arrancar el audio tras un gesto del usuario,
+// así que el AudioContext se crea con el primer clic o tecla.
+let audioCtx = null;
+let muted = getStored("cv-muted", "false") === "true";
+const UNLOCK_EVENTS = ["pointerdown", "pointerup", "keydown"];
+
+function unlockAudio() {
+  // Un toque en pantalla aún no cuenta como gesto en pointerdown; se espera al pointerup
+  if (navigator.userActivation && !navigator.userActivation.isActive) return;
   try {
     audioCtx ??= new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = type;
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-    osc.connect(gain).connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + duration);
-  } catch {}
+  } catch {
+    return stopUnlocking(); // sin Web Audio no hay sonidos
+  }
+  audioCtx.resume().then(() => { if (audioCtx.state === "running") stopUnlocking(); }, () => {});
+}
+
+function stopUnlocking() {
+  UNLOCK_EVENTS.forEach((type) => document.removeEventListener(type, unlockAudio));
+}
+
+function playTone(freq, duration, type = "square", vol = 0.06) {
+  if (muted || !audioCtx) return;
+  const t = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(vol, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start(t);
+  osc.stop(t + duration);
 }
 
 const sounds = {
@@ -206,93 +88,80 @@ const sounds = {
   skin: () => [523, 659, 784].forEach((f, i) => setTimeout(() => playTone(f, 0.1), i * 80)),
 };
 
+// El icono cambia con CSS según aria-pressed
 function setMuted(value) {
   muted = value;
   store("cv-muted", value);
-  const btn = $("#mute-btn");
-  btn.classList.toggle("is-muted", value);
-  btn.setAttribute("aria-pressed", value);
-  btn.setAttribute("aria-label", value ? "Activar sonidos" : "Silenciar sonidos");
+  $("#mute-btn").setAttribute("aria-pressed", value);
 }
 
-// ─── 5. EFECTO DE TECLEO ────────────────────────────────
+// ─── 4. EFECTO DE TECLEO ────────────────────────────────
+// Reescribe textos que ya están en el HTML: sin JS se ven enteros.
 function typeText(el, text, speed) {
+  const chars = [...text];
+  el.textContent = "";
   return new Promise((resolve) => {
-    let i = 0;
-    el.textContent = "";
     const timer = setInterval(() => {
-      el.textContent += text[i++];
+      el.textContent += chars.shift();
       sounds.type();
-      if (i >= text.length) { clearInterval(timer); resolve(); }
+      if (!chars.length) { clearInterval(timer); resolve(); }
     }, speed);
   });
 }
 
 async function runTyping() {
-  await typeText($("#typing"), "whoami", 80);
-  await new Promise((r) => setTimeout(r, 400));
-  await typeText($("#tagline"), profile.tagline, 30);
+  const command = $("#typing");
+  const tagline = $("#tagline");
+  const text = tagline.textContent;
+  tagline.style.minHeight = `${tagline.offsetHeight}px`; // reserva el alto para que no salte lo de debajo
+  tagline.textContent = "";
+  await typeText(command, command.textContent, 80);
+  await wait(400);
+  await typeText(tagline, text, 30);
+  tagline.style.minHeight = "";
 }
 
-// ─── 6. APARICIÓN AL HACER SCROLL ───────────────────────
-function initScrollReveal() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
-  $$("[data-reveal]").forEach((el) => observer.observe(el));
-}
-
-// ─── 7. RELOJ ───────────────────────────────────────────
+// ─── 5. RELOJ ───────────────────────────────────────────
+// Se rellenan fecha y hora; el CSS decide qué se ve en cada tema.
 function updateClock() {
   const now = new Date();
-  const time = now.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
-  const day = now.toLocaleDateString("es-ES", { weekday: "short", day: "numeric", month: "short" });
-  $("#clock").textContent = document.documentElement.dataset.skin === "ubuntu" ? `${day}, ${time}` : time;
+  $(".os-clock__date").textContent = `${now.toLocaleDateString("es-ES", { weekday: "short", day: "numeric", month: "short" })},`;
+  $(".os-clock__time").textContent = now.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
 }
 
-// ─── 8. EVENTOS ─────────────────────────────────────────
+// Se actualiza justo al cambiar de minuto
+function startClock() {
+  updateClock();
+  setTimeout(startClock, 60000 - (Date.now() % 60000));
+}
+
+// ─── 6. EVENTOS ─────────────────────────────────────────
 function bindEvents() {
-  // Acciones del menú Sistema
   document.addEventListener("click", (e) => {
+    if (e.target.closest("a, button, summary")) sounds.click();
+    closeMenus(e.target);
     const action = e.target.closest("[data-action]")?.dataset.action;
-    if (action) e.preventDefault();
     if (action === "skin") nextSkin();
     if (action === "print") window.print();
-    if (e.target.closest("a, button")) sounds.click();
   });
 
   // Hover: suena una vez al entrar en un enlace o botón (no en sus hijos)
   document.addEventListener("pointerover", (e) => {
-    const el = e.target.closest("a, button");
+    const el = e.target.closest("a, button, summary");
     if (el && !el.contains(e.relatedTarget)) sounds.hover();
   });
 
+  document.addEventListener("keydown", closeMenuOnEscape);
   $("#mute-btn").addEventListener("click", () => setMuted(!muted));
-
-  document.addEventListener("keydown", (e) => {
-    if (e.ctrlKey && e.shiftKey && e.key.toUpperCase() === "T") { e.preventDefault(); nextSkin(); }
-  });
+  UNLOCK_EVENTS.forEach((type) => document.addEventListener(type, unlockAudio));
 }
 
 // ─── INICIO ─────────────────────────────────────────────
 function init() {
-  render();
-  applySkin(SKINS.includes(document.documentElement.dataset.skin) ? document.documentElement.dataset.skin : "win95");
   setMuted(muted);
   bindEvents();
-  setInterval(updateClock, 30000);
-
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    $$("[data-reveal]").forEach((el) => el.classList.add("visible"));
-  } else {
-    initScrollReveal();
-    runTyping();
-  }
+  startClock();
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) runTyping();
 }
 
 init();
