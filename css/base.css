@@ -28,7 +28,7 @@ a:hover { text-decoration: underline; }
 
 .visually-hidden {
   position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0;
-  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
 }
 
 .skip-link { position: absolute; left: 0; top: -100px; z-index: 2000; padding: var(--space-s) var(--space-m); background: var(--title-bg); color: var(--title-text); }
@@ -162,7 +162,8 @@ html:not(.js) .os-tray { display: none; } /* sin JS solo quedaría la bandeja va
 .site-footer a { color: inherit; text-decoration: underline; }
 
 /* ─── Movimiento ──────────────────────────── */
-@media (prefers-reduced-motion: no-preference) {
+/* Solo en pantalla: al imprimir, las ventanas fuera de vista saldrían transparentes */
+@media screen and (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
   .cursor { animation: blink 1s step-end infinite; }
 
@@ -196,7 +197,7 @@ html:not(.js) .os-tray { display: none; } /* sin JS solo quedaría la bandeja va
   body { font: 9.5pt/1.45 Arial, Helvetica, sans-serif !important; padding: 0 !important; }
   .os-bar, .menu, .skip-link, .js-only, .window__titlebar, .window__menubar, .term-line, .site-footer { display: none !important; }
   #desktop { max-width: none; padding: 0 !important; }
-  .window { margin: 0 0 8pt !important; border: 0 !important; padding: 0 !important; animation: none !important; }
+  .window { margin: 0 0 8pt !important; border: 0 !important; padding: 0 !important; }
   .window__body { padding: 0 !important; border: 0 !important; font: inherit !important; }
   .window__heading { margin: 0 0 4pt !important; padding-bottom: 2pt !important; border-bottom: 1px solid #999 !important; font-size: 12pt !important; font-weight: bold !important; }
   .hero__name { font-size: 20pt !important; }
