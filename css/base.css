@@ -23,8 +23,9 @@ h1, h2, h3 { line-height: 1.2; }
 button { font: inherit; color: inherit; }
 table { border-collapse: collapse; }
 img { max-width: 100%; height: auto; }
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
+/* Subrayados: el color solo no basta para distinguirlos del texto (WCAG 1.4.1) */
+a { color: var(--accent); text-decoration: underline; }
+a:hover { text-decoration-thickness: 2px; }
 
 .visually-hidden {
   position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0;
@@ -96,7 +97,7 @@ html:not(.js) .os-tray { display: none; } /* sin JS solo quedaría la bandeja va
 
 /* Ventana terminal (inicio) */
 .window--terminal .window__body { background: var(--term-bg); color: var(--term-text); font-family: var(--term-font); }
-.window--terminal a { color: inherit; text-decoration: underline; }
+.window--terminal a { color: inherit; }
 .term-line { margin-bottom: var(--space-s); }
 .cursor { display: inline-block; width: .55em; height: 1em; margin-left: 2px; vertical-align: text-bottom; background: currentColor; }
 .hero__name { font-family: inherit; font-size: var(--hero-name-size, 2.2rem); font-weight: bold; }
@@ -159,21 +160,22 @@ html:not(.js) .os-tray { display: none; } /* sin JS solo quedaría la bandeja va
 
 /* Pie */
 .site-footer { max-width: 880px; margin-inline: auto; padding: 0 var(--space-m) var(--space-l); color: var(--desk-text); font-size: .9em; text-align: center; }
-.site-footer a { color: inherit; text-decoration: underline; }
+.site-footer a { color: inherit; }
 
 /* ─── Movimiento ──────────────────────────── */
-/* Solo en pantalla: al imprimir, las ventanas fuera de vista saldrían transparentes */
+/* Solo en pantalla: al imprimir, las ventanas fuera de vista saldrían desplazadas */
 @media screen and (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
   .cursor { animation: blink 1s step-end infinite; }
 
-  /* Aparición al hacer scroll. Sin soporte, las ventanas se ven sin animar */
+  /* Aparición al hacer scroll. Sin fundido: a medio aparecer, el texto perdería contraste.
+     Sin soporte, las ventanas se ven sin animar */
   @supports (animation-timeline: view()) {
     .window { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 30%; }
   }
 }
 @keyframes blink { 50% { opacity: 0; } }
-@keyframes reveal { from { opacity: 0; translate: 0 24px; } }
+@keyframes reveal { from { translate: 0 24px; } }
 
 /* ─── Móvil ───────────────────────────────── */
 @media (max-width: 576px) {
