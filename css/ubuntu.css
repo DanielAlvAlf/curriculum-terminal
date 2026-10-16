@@ -1,7 +1,7 @@
 /* ============================================
    Tema Ubuntu 10.04 Lucid Lynx (Ambiance)
    Barras oscuras, botones a la izquierda, acentos naranja.
-   --accent (#c2410c) es para texto y enlaces; los naranjas
+   --accent (#c2410c) es para texto, enlaces y el resaltado de los menús; los naranjas
    #dd4814 y #f07746 quedan para detalles decorativos.
    ============================================ */
 
@@ -17,7 +17,7 @@
   --accent: #c2410c;
   --title-bg: linear-gradient(#5a5953, #3c3b37);
   --title-text: #dfdbd2;
-  --menu-hover: #f07746;
+  --menu-hover: var(--accent);  /* 5,2:1 con texto blanco; #f07746 daba 2,8:1 */
   --menu-hover-text: #fff;
   --line: #d6d3ce;
   --term-bg: #300a24;
